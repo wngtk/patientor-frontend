@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { Patient } from "../../types";
 import patients from "../../services/patients";
 import GenderIcon from "./GenderIcon";
+import Entries from "./Entries.tsx";
 
 const PatientInfo = () => {
   const id = useParams().id;
@@ -28,6 +29,7 @@ const PatientInfo = () => {
           </h2>
           <div>ssn: {patient.ssn}</div>
           <div>occupation: {patient.occupation}</div>
+          <Entries entries={patient.entries} />
         </>
       )}
     </div>
