@@ -1,10 +1,11 @@
-import {Entry} from "../../types.ts";
+import {Diagnosis, Entry} from "../../types.ts";
 
 interface Props {
-    entries: Entry[]
+    entries: Entry[];
+    diagnosis: Diagnosis[];
 }
 
-const Entries = ({ entries }: Props) => {
+const Entries = ({ entries, diagnosis }: Props) => {
     if (!entries || entries.length === 0) { return null; }
 
     return (
@@ -15,7 +16,7 @@ const Entries = ({ entries }: Props) => {
                     <div>{entry.date} <em>{entry.description}</em></div>
                     <ul>
                         {entry.diagnosisCodes?.map((code) => (
-                            <li key={code}>{code}</li>
+                            <li key={code}>{code} {diagnosis.find(d => d.code === code)?.name}</li>
                         ))}
                     </ul>
                 </div>))
