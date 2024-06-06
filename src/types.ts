@@ -19,7 +19,7 @@ interface BaseEntry {
   diagnosisCodes?: Array<Diagnosis['code']>;
 }
 
-interface OccupationalHealthcareEntry extends BaseEntry {
+export interface OccupationalHealthcareEntry extends BaseEntry {
   type: 'OccupationalHealthcare'
   employerName: string
   sickLeave?: {
@@ -28,7 +28,7 @@ interface OccupationalHealthcareEntry extends BaseEntry {
   }
 }
 
-interface HospitalEntry extends BaseEntry {
+export interface HospitalEntry extends BaseEntry {
   type: 'Hospital'
   discharge: {
     date: string
@@ -36,7 +36,7 @@ interface HospitalEntry extends BaseEntry {
   }
 }
 
-interface HealthCheckEntry extends BaseEntry {
+export interface HealthCheckEntry extends BaseEntry {
   type: 'HealthCheck'
   healthCheckRating: number
 }
@@ -56,3 +56,12 @@ export interface Patient {
 export type NoSensitivePatient = Omit<Patient, 'ssn' | 'entries'>;
 
 export type PatientFormValues = Omit<Patient, "id" | "entries">;
+
+/**
+ * Helper function for exhaustive type checking
+ */
+export const assertNever = (value: never): never => {
+  throw new Error(
+    `Unhandled discriminated union member: ${JSON.stringify(value)}`
+  );
+};

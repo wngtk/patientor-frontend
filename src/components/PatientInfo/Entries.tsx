@@ -1,28 +1,27 @@
-import {Diagnosis, Entry} from "../../types.ts";
+import { Box, Stack } from "@mui/material";
+import { Entry } from "../../types.ts";
+import EntryDetials from "./EntryDetials.tsx";
+import "./entry.css";
 
 interface Props {
-    entries: Entry[];
-    diagnosis: Diagnosis[];
+  entries: Entry[];
 }
 
-const Entries = ({ entries, diagnosis }: Props) => {
-    if (!entries || entries.length === 0) { return null; }
+const Entries = ({ entries }: Props) => {
+  if (!entries || entries.length === 0) {
+    return null;
+  }
 
-    return (
-        <>
-            <h3>entries</h3>
-            {entries.map((entry) => (
-                <div key={entry.id}>
-                    <div>{entry.date} <em>{entry.description}</em></div>
-                    <ul>
-                        {entry.diagnosisCodes?.map((code) => (
-                            <li key={code}>{code} {diagnosis.find(d => d.code === code)?.name}</li>
-                        ))}
-                    </ul>
-                </div>))
-            }
-        </>
-    );
+  return (
+    <>
+      <h3>entries</h3>
+      <Stack spacing={2}>
+        {entries.map((entry) => (
+          <EntryDetials key={entry.id} entry={entry} />
+        ))}
+      </Stack>
+    </>
+  );
 };
 
 export default Entries;
