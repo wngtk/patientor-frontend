@@ -1,4 +1,4 @@
-import { Box, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import { Entry } from "../../types.ts";
 import EntryDetials from "./EntryDetials.tsx";
 import "./entry.css";
