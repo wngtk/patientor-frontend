@@ -5,10 +5,12 @@ import patients from "../../services/patients";
 import GenderIcon from "./GenderIcon";
 import Entries from "./Entries.tsx";
 import EntryForm from "./EntryForm.tsx";
+import Notify from "../Notify.tsx";
 
 const PatientInfo = () => {
   const id = useParams().id;
   const [patient, setPatient] = useState<Patient | null>(null);
+  const [message, setMessage] = useState('')
 
   if (!id) {
     return null
@@ -23,6 +25,13 @@ const PatientInfo = () => {
     void fetchPatient();
   }, [id]);
 
+    
+  const notify = (message: string) => {
+    setMessage(message);
+    setTimeout(() => {
+      setMessage('');
+    }, 5000);
+  }
 
   return (
     <div>
@@ -33,7 +42,8 @@ const PatientInfo = () => {
           </h2>
           <div>ssn: {patient.ssn}</div>
           <div>occupation: {patient.occupation}</div>
-          <EntryForm patientId={id} setPatient={setPatient} />
+          <Notify errorMessage={message} />
+          <EntryForm patientId={id} setPatient={setPatient} setError={notify} />
           <Entries
               entries={patient.entries}
           />

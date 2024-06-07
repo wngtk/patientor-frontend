@@ -2,6 +2,7 @@ import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { SyntheticEvent } from "react";
 import { HealthCheckEntry, Patient } from "../../types";
 import patientsService from "../../services/patients";
+import axios, { AxiosError } from "axios";
 
 // 做类型体操啦！
 // 把原本想要的字段类型转换成每个字段都是一个对象里面有个 value
@@ -13,11 +14,12 @@ type HealthCheckEntryWithoutId = Omit<HealthCheckEntry, 'id'>
 
 interface Props {
   patientId: string,
-  setPatient: React.Dispatch<React.SetStateAction<Patient | null>>
+  setPatient: React.Dispatch<React.SetStateAction<Patient | null>>,
+  setError: (message: string) => void
 }
 
-const EntryForm = ({ patientId, setPatient }: Props) => {
-  const onSubmit = (event: SyntheticEvent) => {
+const EntryForm = ({ patientId, setPatient, setError }: Props) => {
+  const onSubmit = async (event: SyntheticEvent) => {
     event.preventDefault()
     const target = event.target as typeof event.target & Target<HealthCheckEntryWithoutId>;
 
@@ -35,8 +37,16 @@ const EntryForm = ({ patientId, setPatient }: Props) => {
 
     console.log(newEntry)
 
-    patientsService.addEntry(patientId, newEntry)
-      .then(data => setPatient(data))
+    try {
+      const data = await patientsService.addEntry(patientId, newEntry)
+      setPatient(data)
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.data && typeof error.response.data.error === 'string') {
+          setError(error.response.data.error)
+        }
+      }
+    }
   };
 
   return (
