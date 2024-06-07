@@ -7,7 +7,7 @@ import {
   TextField,
 } from "@mui/material";
 import { SyntheticEvent, useState } from "react";
-import { EntryWithoutId, HealthCheckEntry, HospitalEntry, OccupationalHealthcareEntry, Patient } from "../../types";
+import { Diagnosis, EntryWithoutId, HealthCheckEntry, HospitalEntry, OccupationalHealthcareEntry, Patient } from "../../types";
 import patientsService from "../../services/patients";
 import axios from "axios";
 
@@ -25,10 +25,13 @@ interface Props {
   patientId: string;
   setPatient: React.Dispatch<React.SetStateAction<Patient | null>>;
   setError: (message: string) => void;
+  diagnosis: Diagnosis[]
 }
 
-const EntryForm = ({ patientId, setPatient, setError }: Props) => {
+const EntryForm = ({ patientId, setPatient, setError, diagnosis }: Props) => {
   const [entryType, setEntryType] = useState("HealthCheck");
+  const [diagnosisCodes, setDiagnosisCodes] = useState<string[]>([])
+
 
   const onSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();
@@ -145,6 +148,8 @@ const EntryForm = ({ patientId, setPatient, setError }: Props) => {
           label="Date"
           variant="standard"
           name="date"
+          type="date"
+          value="2024-12-21"
         />
         <TextField
           id="standard-basic"
@@ -204,6 +209,20 @@ const EntryForm = ({ patientId, setPatient, setError }: Props) => {
           variant="standard"
           name="diagnosisCodes"
         />
+        <Select
+          multiple
+          value={diagnosisCodes}
+          onChange={({ target: { value } }) => setDiagnosisCodes(typeof value === 'string' ? value.split(',') : value)}
+        >
+          {diagnosis.map((d) => (
+            <MenuItem
+              key={d.name}
+              value={d.code}
+            >
+              {d.code}
+            </MenuItem>
+          ))}
+        </Select>
         <Box display="flex" justifyContent="space-between" pt={2}>
           <Button variant="contained" color="warning">
             CANCEL
