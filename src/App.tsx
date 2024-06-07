@@ -12,6 +12,7 @@ import PatientInfo from "./components/PatientInfo";
 
 const App = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
+  const [message, setMessage] = useState('')
 
   useEffect(() => {
     void axios.get<void>(`${apiBaseUrl}/ping`);
@@ -23,6 +24,13 @@ const App = () => {
     void fetchPatientList();
   }, []);
   
+  const notify = (message: string) => {
+    setMessage(message);
+    setTimeout(() => {
+      setMessage('');
+    }, 5000);
+  }
+
   return (
     <div className="App">
       <Router>

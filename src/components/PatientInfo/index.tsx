@@ -4,12 +4,15 @@ import {Patient} from "../../types";
 import patients from "../../services/patients";
 import GenderIcon from "./GenderIcon";
 import Entries from "./Entries.tsx";
+import EntryForm from "./EntryForm.tsx";
 
 const PatientInfo = () => {
   const id = useParams().id;
   const [patient, setPatient] = useState<Patient | null>(null);
 
-  console.log(id);
+  if (!id) {
+    return null
+  }
 
   useEffect(() => {
     if (!id) return;
@@ -30,6 +33,7 @@ const PatientInfo = () => {
           </h2>
           <div>ssn: {patient.ssn}</div>
           <div>occupation: {patient.occupation}</div>
+          <EntryForm patientId={id} setPatient={setPatient} />
           <Entries
               entries={patient.entries}
           />
